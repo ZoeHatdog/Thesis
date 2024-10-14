@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+    <!-- Montserrat Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="/css/sample.css">
+
+    <!-- ApexCharts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.3/apexcharts.min.js"></script>
+    <style>
+       
+        a, u {
+            text-decoration: none;
+    }   
+
+    </style>
+</head>
+<body>
+    <div class="grid-container">
+
+        <!-- Header -->
+        <header class="header">
+            <div class="menu-icon" onclick="openSidebar()">
+                <span class="material-icons-outlined">menu</span>
+            </div>
+            <div class="header-left">
+                
+            </div>
+            <div class="header-right">
+                <a href="/messaging" target="_self">
+                    <span class="material-symbols-outlined mailCircle">mail</span>
+                </a>
+                <span class="material-icons-outlined accountCircle" id="accountCircle">account_circle</span>
+                <div id="dropdownMenu" class="dropdown">
+                    <a href="#">Profile</a>
+                    <a href="#">Settings</a>
+                    <a class="dropdown-item" href="/logout">Logout</a>
+                </div>
+            </div>
+        </header>
+        <!-- End Header -->
+
+        <!-- Sidebar -->
+        <aside id="sidebar">
+            <div class="sidebar-title">
+                <div class="sidebar-brand">
+                    <span class="material-icons-outlined">groups</span>
+                    <a href="" target="_blank">Self-Sustaining Indoor Vertical Farm</a>
+                </div>
+                <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+            </div>
+
+            <ul class="sidebar-list">
+                <li class="sidebar-list-item">
+                    <a href="/dashboard" target="_self">
+                        <span class="material-icons-outlined">dashboard</span> Dashboard
+                    </a>
+                </li>
+                <li class="sidebar-list-item">
+                    <a href="/registration" target="_self">
+                        <span class="material-icons-outlined">inventory_2</span> Sensors
+                    </a>
+                </li>                
+                <li class="sidebar-list-item">
+                    <a href="/delete" target="_self">
+                        <span class="material-icons-outlined">fact_check</span> Consumptions
+                    </a>
+                </li>
+                <li class="sidebar-list-item">
+                    <a href="/seeemployee" target="_self">
+                        <span class="material-icons-outlined">manage_accounts</span> Toggle Growing Mode
+                    </a>
+                </li>
+                <li class="sidebar-list-item">
+                    <a href="/seedata" target="_self">
+                        <span class="material-icons-outlined">bar_chart</span> See Data
+                    </a>
+                </li>
+                
+            </ul>
+        </aside>
+        <!-- End Sidebar -->
+
+        <!-- Main -->
+        <main class="main-container">
+            <div class="main-title">
+                <p class="font-weight-bold">DASHBOARD</p>
+            </div>
+            <div class="see-user">
+                <h1>Welcome, </h1>
+            </div>
+            <div class="main-cards">
+                <div class="card">
+                    <a href = "/seeemployee" target="_self">
+                        <div class="card-inner">
+                            <p class="text-primary">Okra (Average Temp) </p>
+                            <span class="material-symbols-outlined">
+                                yard
+                                </span>
+                        </div>
+                        <span class="text-primary font-weight-bold"> 30°C </span>
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="/see-active" target="_self">
+                        <div class="card-inner">
+                            <p class="text-primary"> Pechay (Average Temp) </p>
+                            <span class="material-symbols-outlined">
+                                grass
+                                </span>
+                        </div>
+                        <span class="text-primary font-weight-bold"> 26°C </span>
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="/see-inactive" target="_self">
+                        <div class="card-inner">
+                            <p class="text-primary"> Lettuce (Average Temp) </p>
+                            <span class="material-symbols-outlined">
+                                park
+                                </span>
+                        </div>
+                        <span class="text-primary font-weight-bold"> 29°C  </span>
+                    </a>
+                </div>
+                <div class="card">
+                    <div class="card-inner">
+                        <p class="text-primary"> Total Number of Plants</p>
+                        <span class="material-symbols-outlined">
+                            psychiatry
+                            </span>
+                    </div>
+                    <span class="text-primary font-weight-bold"> 3 </span>
+                </div>
+            </div>
+
+            <div class="charts">
+                <!-- Chart 1: Average Temperature of Overall Plants -->
+                <div class="charts-card">
+                    <p class="chart-title">Average Temp of Overall Plants </p>
+                    <div id="tempChart" style="height: 300px;"></div>
+                </div>
+
+                <!-- Chart 2: Average Humidity of Overall Plants -->
+                <div class="charts-card">
+                    <p class="chart-title">Average Humidity of Overall Plants </p>
+                    <div id="humidityChart" style="height: 300px;"></div>
+                </div>
+            </div>
+        </main>
+        <!-- End Main -->
+    </div>
+
+    <!-- Custom JS -->
+    <script src="/js/scripts.js"></script>
+
+    <!-- Inline Script for ApexCharts -->
+    <script>
+        // Average Temperature Chart (Temp in Celsius)
+        var tempOptions = {
+            series: [{
+                name: 'Okra',
+                data: [30, 31, 32, 29, 28, 30, 31]
+            }, {
+                name: 'Pechay',
+                data: [26, 27, 26, 27, 26, 26, 25]
+            }, {
+                name: 'Lettuce',
+                data: [29, 30, 28, 29, 29, 30, 28]
+            }],
+            chart: {
+                type: 'line',
+                height: 300
+            },
+            title: {
+                text: 'Average Temperature of Plants Over 7 Days',
+                align: 'left'
+            },
+            xaxis: {
+                categories: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7']
+            },
+            yaxis: {
+                title: {
+                    text: 'Temperature (°C)'
+                }
+            }
+        };
+
+        var tempChart = new ApexCharts(document.querySelector("#tempChart"), tempOptions);
+        tempChart.render();
+
+        // Average Humidity Chart (Percentage)
+        var humidityOptions = {
+            series: [{
+                name: 'Okra',
+                data: [65, 66, 67, 63, 62, 64, 65]
+            }, {
+                name: 'Pechay',
+                data: [70, 72, 70, 69, 68, 71, 70]
+            }, {
+                name: 'Lettuce',
+                data: [60, 61, 62, 60, 59, 60, 61]
+            }],
+            chart: {
+                type: 'line',
+                height: 300
+            },
+            title: {
+                text: 'Average Humidity of Plants Over 7 Days',
+                align: 'left'
+            },
+            xaxis: {
+                categories: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7']
+            },
+            yaxis: {
+                title: {
+                    text: 'Humidity (%)'
+                }
+            }
+        };
+
+        var humidityChart = new ApexCharts(document.querySelector("#humidityChart"), humidityOptions);
+        humidityChart.render();
+    </script>
+</body>
+</html>
