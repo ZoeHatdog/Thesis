@@ -104,34 +104,36 @@
                 <div class="card">
                     <a href = "/seeemployee" target="_self">
                         <div class="card-inner">
-                            <p class="text-primary">Okra (Average Temp) </p>
+                            <p class="text-primary">Okra (Current Temp) </p>
                             <span class="material-symbols-outlined">
                                 yard
                                 </span>
                         </div>
-                        <span class="text-primary font-weight-bold"> 30°C </span>
+                        <span class="text-primary font-weight-bold">
+                            <span class="text-primary font-weight-bold"> <%= okraTemperature ? okraTemperature : 'N/A' %> °C </span>
+                        </span>
                     </a>
                 </div>
                 <div class="card">
                     <a href="/see-active" target="_self">
                         <div class="card-inner">
-                            <p class="text-primary"> Pechay (Average Temp) </p>
+                            <p class="text-primary"> Pechay (Current Temp) </p>
                             <span class="material-symbols-outlined">
                                 grass
                                 </span>
                         </div>
-                        <span class="text-primary font-weight-bold"> 26°C </span>
+                        <span class="text-primary font-weight-bold"> <%= pechayTemperature ? pechayTemperature : 'N/A' %> °C </span>
                     </a>
                 </div>
                 <div class="card">
                     <a href="/see-inactive" target="_self">
                         <div class="card-inner">
-                            <p class="text-primary"> Lettuce (Average Temp) </p>
+                            <p class="text-primary"> Lettuce (Current Temp) </p>
                             <span class="material-symbols-outlined">
                                 park
                                 </span>
                         </div>
-                        <span class="text-primary font-weight-bold"> 29°C  </span>
+                        <span class="text-primary font-weight-bold"> <%= lettuceTemperature ? lettuceTemperature : 'N/A' %> °C </span>
                     </a>
                 </div>
                 <div class="card">

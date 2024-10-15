@@ -12,6 +12,7 @@ var admin = require("firebase-admin");
 // Use path.resolve to ensure an absolute path
 var serviceAccount = require(path.resolve(__dirname, 'config/fir-801cf-firebase-adminsdk-gx8cz-af012cd3dc.json'));
 
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://fir-801cf-default-rtdb.asia-southeast1.firebasedatabase.app"
@@ -27,23 +28,6 @@ server.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
 });
 
-/* Uncomment this block if you're still using MySQL
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'welcome.2024', // your MySQL password
-    database: 'employee_management'
-});
-
-db.connect((err) => {
-    if (err) {
-        console.error('Error connecting to the database:', err);
-        return;
-    }
-    console.log('Connected to the MySQL database');
-});
-*/
-
 // Middleware setup
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
@@ -57,32 +41,41 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+
 const db = admin.database();
-// Routes
-app.get('/', (req, res) => {
-    res.render('dashboard');
-});
 
-// Firebase fetch example
-// Route to fetch temperature readings
-app.get('/fetch-readings', async (req, res) => {
+// Route to fetch temperature readings and render dashboard
+app.get('/', async (req, res) => {
     try {
-        // Reference to the Temperature data
-        const ref = db.ref('/Lettuce/CurrentReadings/Temperature');
-        
-        // Fetch the data from the database
-        ref.once('value', (snapshot) => {
-            const temperatureData = snapshot.val(); // Get the data as an object
+        // Create references for Lettuce, Okra, and Pechay
+        const refLettuce = db.ref('/Lettuce/CurrentReadings/Temperature');
+        const refOkra = db.ref('/Okra/CurrentReadings/Temperature');
+        const refPechay = db.ref('/Pechay/CurrentReadings/Temperature');
 
-            if (temperatureData) {
-                console.log('Temperature readings:', temperatureData);
-                res.status(200).json(temperatureData); // Send the temperature data as JSON
-            } else {
-                res.status(404).send('No temperature data found');
-            }
+        // Fetch the temperature data for each vegetable concurrently
+        const lettuceSnapshot = await refLettuce.once('value');
+        const okraSnapshot = await refOkra.once('value');
+        const pechaySnapshot = await refPechay.once('value');
+
+        // Extract the temperature values from the snapshots
+        const lettuceTemperature = lettuceSnapshot.val();
+        const okraTemperature = okraSnapshot.val();
+        const pechayTemperature = pechaySnapshot.val();
+
+        // Log the data to make sure it's being fetched
+        console.log('Lettuce Temperature:', lettuceTemperature);
+        console.log('Okra Temperature:', okraTemperature);
+        console.log('Pechay Temperature:', pechayTemperature);
+
+        // Pass the temperature data for Lettuce, Okra, and Pechay to the dashboard template
+        res.render('dashboard', { 
+            lettuceTemperature: lettuceTemperature || 'N/A',
+            okraTemperature: okraTemperature || 'N/A',
+            pechayTemperature: pechayTemperature || 'N/A'
         });
     } catch (error) {
         console.error('Error fetching Realtime Database data:', error);
         res.status(500).send('Error fetching readings');
     }
+
 });
